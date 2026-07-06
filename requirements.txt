@@ -19,3 +19,5 @@ requests
 pandas
 typing-extensions
 plotly
+gunicorn
+tiktoken
