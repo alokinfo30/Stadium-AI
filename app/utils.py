@@ -1,7 +1,7 @@
 # app/utils.py
 import json
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 import re
 
 logger = logging.getLogger(__name__)

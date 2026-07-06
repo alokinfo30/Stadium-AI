@@ -60,7 +60,7 @@ class ModelManager:
         self._last_test_time = 0
         self._cache_duration = 300
         
-        logger.info(f"🚀 Model Manager initialized for Stadium AI")
+        logger.info("🚀 Model Manager initialized for Stadium AI")
         logger.info(f"  Primary Model: {self.primary_model}")
         logger.info(f"  Fallback Models: {self.fallback_models}")
         logger.info(f"  Strategy: {self.strategy.value}")
@@ -93,7 +93,7 @@ class ModelManager:
     
     def _test_model(self, model: str) -> bool:
         try:
-            response = self.client.chat.completions.create(
+            self.client.chat.completions.create(
                 model=model,
                 messages=[{"role": "user", "content": "Test"}],
                 max_tokens=5,
@@ -168,7 +168,7 @@ class ModelManager:
         for model in all_models:
             try:
                 logger.info(f"Testing {model}...")
-                response = self.client.chat.completions.create(
+                self.client.chat.completions.create(
                     model=model,
                     messages=[{"role": "user", "content": "Say OK"}],
                     max_tokens=10

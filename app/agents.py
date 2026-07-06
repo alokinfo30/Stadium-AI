@@ -1,5 +1,4 @@
 # app/agents.py
-import os
 import logging
 from crewai import Agent
 from app.model_manager import model_manager

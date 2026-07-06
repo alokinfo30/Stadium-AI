@@ -200,10 +200,17 @@ Pydantic for data validation
 
 ✅ Deployment Ready:
 
-
 Works with Render, Heroku
 Environment variable configuration
 Complete error handling
 Responsive for all devices
+
+## CI/CD
+
+- CI workflow runs tests, linting, and security scanning on pushes and pull requests.
+- CD workflow deploys on pushes to main/master to the production environment.
+- CD workflow also deploys pull requests to a preview environment when a deployment hook is configured.
+
+To enable deployment, add a secret named RENDER_DEPLOY_HOOK_URL with your platform deployment hook.
 
 The platform is ready to enhance the FIFA World Cup 2026 experience! ⚽🏟️

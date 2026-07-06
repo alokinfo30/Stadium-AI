@@ -1,8 +1,8 @@
 # app/crew.py
-from crewai import Crew, Task
+from crewai import Crew
 import os
 import logging
-from typing import Dict, List, Optional
+from typing import Dict
 from app.model_manager import model_manager
 
 logger = logging.getLogger(__name__)
@@ -201,7 +201,7 @@ class StadiumAICrew:
     def handle_operational_intelligence(self, data: str, language: str = "en") -> Dict:
         """Handle operational intelligence request"""
         try:
-            logger.info(f"📊 Operational Intelligence")
+            logger.info("📊 Operational Intelligence")
             
             agent = self.create_operational_intelligence_agent()
             task = self.create_operational_intelligence_task(agent, data, language)

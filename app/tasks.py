@@ -91,7 +91,7 @@ def create_crowd_management_task(agent, zone: str, current_crowd_level: str):
         
         Provide actionable recommendations for staff and fans.
         """,
-        expected_output=f"""
+        expected_output="""
         A detailed crowd management report including:
         - Crowd density assessment
         - Congestion point identification

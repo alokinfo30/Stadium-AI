@@ -1,0 +1,71 @@
+name: CD
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: write
+
+concurrency:
+  group: cd-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      url: ${{ github.event_name == 'pull_request' && format('https://preview-stadium-ai-pr-{0}.example.com', github.event.pull_request.number) || 'https://stadium-ai.example.com' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create deployment record
+        id: deployment
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+          initial_status: pending
+          description: Deploying Stadium-AI
+
+      - name: Deploy application
+        id: deploy
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$DEPLOY_HOOK_URL" ]; then
+            echo "Triggering deployment hook..."
+            curl -fsSL -X POST "$DEPLOY_HOOK_URL"
+            echo "deployment_status=deployed" >> "$GITHUB_OUTPUT"
+          else
+            echo "No deployment hook configured. Skipping external deployment."
+            echo "deployment_status=skipped" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Mark deployment as successful
+        if: success()
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          state: success
+          description: Deployment completed successfully
+
+      - name: Mark deployment as failed
+        if: failure()
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          state: failure
+          description: Deployment failed

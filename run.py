@@ -17,7 +17,7 @@ if __name__ == '__main__':
     print("🏟️ AI Stadium Assistant - FIFA World Cup 2026")
     print("=" * 70)
     print(f"🚀 Server running at: http://localhost:{port}")
-    print(f"📱 Open in your browser")
+    print("📱 Open in your browser")
     print("=" * 70)
     print("🤖 AI Agents:")
     print("  1. 🧭 Navigation Agent - Wayfinding and directions")
