@@ -45,13 +45,11 @@ def create_navigation_task(agent, current_location: str, destination: str, langu
 def create_crowd_management_task(agent, zone: str, current_crowd_level: str):
     """Create the crowd management task"""
     return Task(
-        description=f"""
-        Analyze crowd situation in {zone} and provide management recommendations.
-        
-        Current Crowd Level: {current_crowd_level}
+        description=f"""Analyze the live crowd situation in {zone} and provide management recommendations.
+        Use your available tools to get the most up-to-date crowd density and flow data for the specified zone.
         
         Tasks:
-        1. Assess crowd density and movement patterns
+        1. Assess the current crowd density and movement patterns using live data.
         2. Identify potential congestion points
         3. Provide real-time alerts and recommendations
         4. Suggest crowd flow optimization strategies
@@ -67,7 +65,7 @@ def create_crowd_management_task(agent, zone: str, current_crowd_level: str):
         
         Provide actionable recommendations for staff and fans.
         """,
-        expected_output="""
+        expected_output=f"""
         A detailed crowd management report including:
         - Crowd density assessment
         - Congestion point identification
