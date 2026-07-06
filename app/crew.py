@@ -1,5 +1,5 @@
 # app/crew.py
-from crewai import Crew
+from crewai import Crew, Task
 import os
 import logging
 from typing import Dict, List, Optional

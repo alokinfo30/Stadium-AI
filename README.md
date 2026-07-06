@@ -89,6 +89,9 @@ cd StadiumAI
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
+# 3. Ensure you have Python 3.10 - 3.13. You can check with:
+# python --version
+
 # 3. Install dependencies
 pip install -r requirements.txt
 
@@ -204,4 +207,3 @@ Complete error handling
 Responsive for all devices
 
 The platform is ready to enhance the FIFA World Cup 2026 experience! ⚽🏟️
-
