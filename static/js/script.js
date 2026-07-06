@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const exportBtn = document.getElementById('exportBtn');
     const copyBtn = document.getElementById('copyBtn');
     const newRequestBtn = document.getElementById('newRequestBtn');
+    const formStatus = document.getElementById('formStatus');
 
     let selectedService = null;
 
-    // Service field configurations
     const serviceFieldsConfig = {
         navigation: [
             { name: 'current_location', label: 'Current Location', type: 'text', placeholder: 'e.g., Main Entrance', required: true },
@@ -47,19 +47,24 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     };
 
-    // Load models
+    function setStatusMessage(message) {
+        if (formStatus) {
+            formStatus.textContent = message;
+        }
+    }
+
     async function loadModels() {
         try {
             const response = await fetch('/api/models');
             const data = await response.json();
-            
+
             const modelList = document.getElementById('modelList');
             modelList.innerHTML = '';
-            
+
             if (data.status === 'success') {
                 const models = data.models;
                 const allModels = [models.primary, ...models.fallbacks];
-                
+
                 allModels.forEach(model => {
                     if (model && model.trim()) {
                         const div = document.createElement('div');
@@ -79,47 +84,57 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Service card click
     serviceGrid.addEventListener('click', function(e) {
         const card = e.target.closest('.service-card');
         if (!card) return;
-        
-        const service = card.dataset.service;
-        selectedService = service;
-        
-        // Highlight selected card
-        document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        
-        // Show input section
-        inputSection.classList.remove('hidden');
-        serviceTitle.textContent = `${card.querySelector('.service-icon').textContent} ${card.querySelector('h3').textContent}`;
-        
-        // Generate fields
-        generateFields(service);
-        
-        // Scroll to input
-        inputSection.scrollIntoView({ behavior: 'smooth' });
+
+        selectService(card);
     });
 
-    // Generate fields for service
+    serviceGrid.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const card = e.target.closest('.service-card');
+        if (!card) return;
+        e.preventDefault();
+        selectService(card);
+    });
+
+    function selectService(card) {
+        const service = card.dataset.service;
+        selectedService = service;
+
+        document.querySelectorAll('.service-card').forEach(c => {
+            c.classList.remove('active');
+            c.setAttribute('aria-pressed', 'false');
+        });
+        card.classList.add('active');
+        card.setAttribute('aria-pressed', 'true');
+
+        inputSection.classList.remove('hidden');
+        serviceTitle.textContent = `${card.querySelector('.service-icon').textContent} ${card.querySelector('h3').textContent}`;
+        generateFields(service);
+        setStatusMessage(`Selected ${card.querySelector('h3').textContent}`);
+        inputSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
     function generateFields(service) {
         const fields = serviceFieldsConfig[service] || [];
         serviceFields.innerHTML = '';
-        
+
         fields.forEach(field => {
             const div = document.createElement('div');
             div.className = 'form-group';
-            
+
             const label = document.createElement('label');
             label.textContent = field.label;
             label.htmlFor = field.name;
-            
+
             let input;
             if (field.type === 'select') {
                 input = document.createElement('select');
                 input.id = field.name;
                 input.name = field.name;
+                input.setAttribute('aria-required', field.required ? 'true' : 'false');
                 field.options.forEach(opt => {
                     const option = document.createElement('option');
                     option.value = opt;
@@ -132,47 +147,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 input.name = field.name;
                 input.placeholder = field.placeholder || '';
                 input.rows = 3;
+                input.setAttribute('aria-required', field.required ? 'true' : 'false');
             } else {
                 input = document.createElement('input');
                 input.type = field.type;
                 input.id = field.name;
                 input.name = field.name;
                 input.placeholder = field.placeholder || '';
+                input.setAttribute('aria-required', field.required ? 'true' : 'false');
             }
-            
+
             if (field.required) {
                 input.required = true;
             }
-            
+
             div.appendChild(label);
             div.appendChild(input);
             serviceFields.appendChild(div);
         });
     }
 
-    // Back button
     backBtn.addEventListener('click', function() {
         inputSection.classList.add('hidden');
         results.classList.add('hidden');
         processing.classList.add('hidden');
-        document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.service-card').forEach(c => {
+            c.classList.remove('active');
+            c.setAttribute('aria-pressed', 'false');
+        });
         selectedService = null;
+        setStatusMessage('Returned to service selection');
     });
 
-    // Form submission
     serviceForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
+
         if (!selectedService) return;
-        
-        // Collect form data
+
         const formData = new FormData(serviceForm);
         const data = {
             service_type: selectedService,
-            language: document.getElementById('language').value
+            language: document.getElementById('language').value,
         };
-        
-        // Add field values
+
         const fields = serviceFieldsConfig[selectedService] || [];
         fields.forEach(field => {
             const value = formData.get(field.name);
@@ -180,25 +197,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 data[field.name] = value;
             }
         });
-        
-        // Show processing
+
         processing.classList.remove('hidden');
         results.classList.add('hidden');
         progressLog.innerHTML = '';
         submitBtn.disabled = true;
         submitBtn.textContent = 'Processing...';
         agentStatus.textContent = '⏳ AI Agent: Starting...';
-        
+        setStatusMessage('Request submitted. Waiting for AI response.');
+
         try {
             agentStatus.textContent = '🤖 AI Agent: Analyzing request...';
             addLog('📤 Sending request to AI agents...');
-            
+
             const response = await fetch('/api/service', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
             });
 
             const result = await response.json();
@@ -206,17 +223,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok && result.status === 'success') {
                 agentStatus.textContent = '✅ AI Agent: Complete!';
                 addLog('✅ Service completed successfully!');
+                setStatusMessage('Response ready.');
                 displayResponse(result);
             } else {
                 agentStatus.textContent = '❌ AI Agent: Error';
                 addLog(`❌ Error: ${result.error || 'Unknown error'}`);
-                alert(`Error: ${result.error || 'Failed to process request'}`);
+                setStatusMessage(result.error || 'Failed to process request');
             }
         } catch (error) {
             console.error('Error:', error);
             agentStatus.textContent = '❌ AI Agent: Network Error';
             addLog(`❌ Network error: ${error.message}`);
-            alert('Error processing request. Please try again.');
+            setStatusMessage('Error processing request. Please try again.');
         } finally {
             processing.classList.add('hidden');
             submitBtn.disabled = false;
@@ -233,24 +251,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function displayResponse(result) {
         results.classList.remove('hidden');
-        
+
         let html = '';
         const responseData = result.result;
-        
+
         if (responseData.result) {
             html = formatContent(responseData.result);
         } else {
             html = formatContent(JSON.stringify(responseData, null, 2));
         }
-        
+
         responseContent.innerHTML = html;
         results.scrollIntoView({ behavior: 'smooth' });
     }
 
+    function escapeHtml(text) {
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
     function formatContent(text) {
         if (!text) return '';
-        
-        let html = text
+
+        let html = escapeHtml(text)
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/^# (.*$)/gm, '<h1>$1</h1>')
@@ -260,27 +287,25 @@ document.addEventListener('DOMContentLoaded', function() {
             .replace(/^\* (.*$)/gm, '<li>$1</li>')
             .replace(/^- (.*$)/gm, '<li>$1</li>')
             .replace(/\n/g, '<br>');
-        
+
         html = html.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
-        
+
         return html;
     }
 
-    // Export
     exportBtn.addEventListener('click', function() {
         const content = responseContent.textContent;
         const blob = new Blob([content], { type: 'text/plain' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `stadium_ai_response_${new Date().toISOString().slice(0,10)}.txt`;
+        a.download = `stadium_ai_response_${new Date().toISOString().slice(0, 10)}.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
     });
 
-    // Copy
     copyBtn.addEventListener('click', function() {
         const text = responseContent.textContent;
         navigator.clipboard.writeText(text).then(() => {
@@ -303,13 +328,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // New request
     newRequestBtn.addEventListener('click', function() {
         results.classList.add('hidden');
         inputSection.scrollIntoView({ behavior: 'smooth' });
+        setStatusMessage('Ready for a new request');
     });
 
-    // Initialize
     loadModels();
     console.log('🏟️ FIFA World Cup 2026 - AI Stadium Assistant loaded successfully!');
 });

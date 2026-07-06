@@ -27,7 +27,8 @@ class StadiumAICrew:
                 create_accessibility_task,
                 create_transportation_task,
                 create_sustainability_task,
-                create_operational_intelligence_task
+                create_operational_intelligence_task,
+                create_multilingual_task
             )
             
             self.create_navigation_agent = create_navigation_agent
@@ -44,6 +45,7 @@ class StadiumAICrew:
             self.create_transportation_task = create_transportation_task
             self.create_sustainability_task = create_sustainability_task
             self.create_operational_intelligence_task = create_operational_intelligence_task
+            self.create_multilingual_task = create_multilingual_task
             
             self.verbose = os.getenv('DEBUG', 'False').lower() == 'true'
             self.model_manager = model_manager
@@ -230,29 +232,13 @@ class StadiumAICrew:
             logger.info(f"🌐 Translation: {source_language} → {target_language}")
             
             agent = self.create_multilingual_agent()
-            
-            # Create a custom translation task
-            task = Task(
-                description=f"""
-                Translate the following text from {source_language} to {target_language}:
-                
-                Text: {text}
-                
-                Requirements:
-                1. Accurate translation
-                2. Maintain tone and context
-                3. Use culturally appropriate expressions
-                4. Consider stadium and football terminology
-                5. Ensure clarity and readability
-                
-                Provide the translation only.
-                """,
-                expected_output=f"The translated text in {target_language}",
-                agent=agent
-            )
+            task = self.create_multilingual_task(agent, text, target_language, source_language)
             
             crew = Crew(agents=[agent], tasks=[task], verbose=self.verbose)
-            result = crew.kickoff(inputs={
+            # The inputs are now part of the task definition, 
+            # but kickoff can still accept them to override if needed.
+            # For clarity, we can pass them here as well.
+            result = crew.kickoff(inputs={ 
                 "text": text,
                 "source_language": source_language,
                 "target_language": target_language

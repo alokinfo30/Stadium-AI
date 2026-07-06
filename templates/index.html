@@ -8,17 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div class="container">
         <header>
             <div class="header-top">
                 <div class="brand">
-                    <span class="logo">🏟️</span>
+                    <span class="logo" aria-hidden="true">🏟️</span>
                     <h1>AI Stadium Assistant</h1>
                 </div>
                 <div class="world-cup-badge">⚽ FIFA World Cup 2026</div>
             </div>
             <p class="subtitle">Your AI-powered companion for an unforgettable match experience</p>
-            <div class="badges">
+            <div class="badges" aria-label="Product highlights">
                 <span class="badge">🤖 7 AI Agents</span>
                 <span class="badge">⚡ Multi-Model</span>
                 <span class="badge">🔄 Auto-Fallback</span>
@@ -26,41 +27,40 @@
             </div>
         </header>
 
-        <main>
-            <!-- Model Status -->
-            <div id="modelStatus" class="model-status">
-                <h3>📊 Available AI Models</h3>
-                <div id="modelList" class="model-grid">Loading models...</div>
+        <main id="main-content" tabindex="-1" role="main">
+            <div id="modelStatus" class="model-status" aria-labelledby="modelStatusHeading">
+                <h2 id="modelStatusHeading">📊 Available AI Models</h2>
+                <div id="modelList" class="model-grid" aria-live="polite">Loading models...</div>
             </div>
 
-            <!-- Service Selection -->
-            <section class="service-section">
-                <h2>🤖 Select a Service</h2>
-                <div class="service-grid" id="serviceGrid">
+            <section class="service-section" aria-labelledby="serviceHeading">
+                <h2 id="serviceHeading">🤖 Select a Service</h2>
+                <div class="service-grid" id="serviceGrid" role="list" aria-label="Available AI services">
                     {% for key, service in services.items() %}
-                    <div class="service-card" data-service="{{ key }}">
-                        <div class="service-icon">{{ service.icon }}</div>
+                    <div class="service-card" data-service="{{ key }}" role="button" tabindex="0" aria-pressed="false" aria-describedby="service-{{ key }}-desc" aria-label="Select {{ service.name }} service">
+                        <div class="service-icon" aria-hidden="true">{{ service.icon }}</div>
                         <h3>{{ service.name }}</h3>
-                        <p>{{ service.description }}</p>
-                        <button class="btn-service">Select</button>
+                        <p id="service-{{ key }}-desc">{{ service.description }}</p>
+                        <button class="btn-service" type="button" aria-label="Select {{ service.name }}">Select</button>
                     </div>
                     {% endfor %}
                 </div>
             </section>
 
-            <!-- Service Input -->
-            <section class="input-section hidden" id="inputSection">
+            <section class="input-section hidden" id="inputSection" aria-labelledby="serviceTitle">
                 <h2 id="serviceTitle">Service Request</h2>
-                <form id="serviceForm">
+                <p id="formInstructions" class="sr-only">Complete the form fields and submit your request.</p>
+                <form id="serviceForm" novalidate aria-describedby="formInstructions">
                     <div id="serviceFields"></div>
                     <div class="form-group">
                         <label for="language">Preferred Language</label>
-                        <select id="language" name="language">
+                        <select id="language" name="language" aria-label="Preferred language">
                             {% for lang in languages %}
                             <option value="{{ lang }}">{{ lang.upper() }}</option>
                             {% endfor %}
                         </select>
                     </div>
+                    <div id="formStatus" class="sr-only" role="status" aria-live="polite"></div>
                     <button type="submit" class="btn-primary" id="submitBtn">
                         🚀 Get Assistance
                     </button>
@@ -68,9 +68,8 @@
                 </form>
             </section>
 
-            <!-- Processing -->
-            <div id="processing" class="processing hidden">
-                <div class="spinner"></div>
+            <div id="processing" class="processing hidden" role="status" aria-live="polite">
+                <div class="spinner" aria-hidden="true"></div>
                 <h3>🔄 Processing Your Request...</h3>
                 <div class="agent-status">
                     <span id="agentStatus">⏳ AI Agent: Working...</span>
@@ -78,17 +77,16 @@
                 <div id="progressLog" class="progress-log"></div>
             </div>
 
-            <!-- Results -->
-            <div id="results" class="results hidden">
+            <div id="results" class="results hidden" aria-live="polite">
                 <div class="results-header">
                     <h2>📋 Service Response</h2>
                     <div class="results-actions">
-                        <button id="exportBtn" class="btn-secondary">📥 Export</button>
-                        <button id="copyBtn" class="btn-secondary">📋 Copy</button>
-                        <button id="newRequestBtn" class="btn-secondary">🔄 New Request</button>
+                        <button id="exportBtn" class="btn-secondary" type="button">📥 Export</button>
+                        <button id="copyBtn" class="btn-secondary" type="button">📋 Copy</button>
+                        <button id="newRequestBtn" class="btn-secondary" type="button">🔄 New Request</button>
                     </div>
                 </div>
-                <div id="responseContent" class="response-content"></div>
+                <div id="responseContent" class="response-content" tabindex="0"></div>
             </div>
         </main>
 

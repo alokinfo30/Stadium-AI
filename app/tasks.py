@@ -42,6 +42,32 @@ def create_navigation_task(agent, current_location: str, destination: str, langu
         agent=agent
     )
 
+def create_multilingual_task(agent, text: str, target_language: str, source_language: str = "en"):
+    """Create the multilingual translation task"""
+    return Task(
+        description=f"""
+        Translate the following text from {source_language} to {target_language}:
+        
+        Text: {text}
+        
+        Requirements:
+        1. Accurate translation
+        2. Maintain tone and context
+        3. Use culturally appropriate expressions
+        4. Consider stadium and football terminology
+        5. Ensure clarity and readability
+        
+        Provide the translation only.
+        """,
+        expected_output=f"The translated text in {target_language}",
+        agent=agent,
+        inputs={
+            "text": text,
+            "source_language": source_language,
+            "target_language": target_language
+        }
+    )
+
 def create_crowd_management_task(agent, zone: str, current_crowd_level: str):
     """Create the crowd management task"""
     return Task(
