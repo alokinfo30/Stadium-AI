@@ -4,7 +4,10 @@ import os
 from datetime import datetime
 
 import bleach
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = lambda: None
 from flask import Blueprint, jsonify, render_template, request
 from pydantic import ValidationError
 
