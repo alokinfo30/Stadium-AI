@@ -152,13 +152,13 @@ document.addEventListener('DOMContentLoaded', function() {
         recognition.onerror = function() {
             voiceMicBtn.classList.remove('recording');
             isRecording = false;
-            if (quickSearchInput) quickSearchInput.placeholder = "Ask AI anything (e.g. 'Where is Section 118?')...";
+            if (quickSearchInput) quickSearchInput.placeholder = "Ask AI anything (e.g. 'Where is Section 118')...";
         };
 
         recognition.onend = function() {
             voiceMicBtn.classList.remove('recording');
             isRecording = false;
-            if (quickSearchInput) quickSearchInput.placeholder = "Ask AI anything (e.g. 'Where is Section 118?')...";
+            if (quickSearchInput) quickSearchInput.placeholder = "Ask AI anything (e.g. 'Where is Section 118')...";
         };
     }
 
