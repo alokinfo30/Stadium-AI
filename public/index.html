@@ -128,6 +128,7 @@
                 <div class="tele-pill">MetLife Stadium</div>
                 <div class="tele-pill">22°C Clear</div>
                 <div class="tele-pill">82,500 Fans (98.4%)</div>
+                <div class="tele-pill">Decibel: <b>96.4 dB</b></div>
                 <div class="tele-pill">Turnstiles: Fast (2m)</div>
             </div>
         </aside>
@@ -141,7 +142,7 @@
                         <h1>AI Stadium Assistant</h1>
                     </div>
                 </div>
-                <div class="fifa-badge-pill">FIFA World Cup 2026</div>
+                <div class="fifa-badge-pill">FIFA World Cup 2026™</div>
             </div>
             <p class="hero-subtitle">Your autonomous AI companion for an unforgettable matchday experience across all host stadiums</p>
             <div class="hero-chips-bar" aria-label="Key platform capabilities">
@@ -150,17 +151,20 @@
                 <span class="hero-chip">Voice AI & Audio Speech</span>
                 <span class="hero-chip">10+ Languages</span>
                 <span class="hero-chip">Interactive Zone Radar</span>
+                <span class="hero-chip">In-Seat Express Food</span>
+                <span class="hero-chip">Digital Pass Wallet</span>
                 <span class="hero-chip">Zero-Waste Stadium</span>
             </div>
         </header>
 
         <!-- 3. MAIN NAVIGATION TABS -->
         <nav class="main-nav-tabs" aria-label="Main application sections">
-            <button type="button" class="nav-tab-btn active" data-tab="ai-hub">AI Agent Services</button>
-            <button type="button" class="nav-tab-btn" data-tab="stadium-map">Interactive Stadium Map</button>
-            <button type="button" class="nav-tab-btn" data-tab="ticket-wallet">Digital Ticket Wallet</button>
-            <button type="button" class="nav-tab-btn" data-tab="concessions">Mobile Food & Concessions</button>
-            <button type="button" class="nav-tab-btn" data-tab="trivia">Fan Trivia & Rewards</button>
+            <button type="button" class="nav-tab-btn active" data-tab="ai-hub">🤖 AI Agent Services</button>
+            <button type="button" class="nav-tab-btn" data-tab="stadium-map">🏟️ Interactive Pitch Map</button>
+            <button type="button" class="nav-tab-btn" data-tab="match-center">⚽ Live Match Center</button>
+            <button type="button" class="nav-tab-btn" data-tab="ticket-wallet">🎟️ Digital Ticket Wallet</button>
+            <button type="button" class="nav-tab-btn" data-tab="concessions">🍔 Mobile Food & Orders</button>
+            <button type="button" class="nav-tab-btn" data-tab="trivia">🏆 Fan Trivia & Rewards</button>
         </nav>
 
         <!-- 4. QUICK SEARCH & VOICE ASSISTANT TOOLBAR -->
@@ -385,7 +389,80 @@
             </div>
 
             <!-- =================================================================
-                 TAB 3: DIGITAL TICKET WALLET
+                 TAB 3: LIVE MATCH CENTER & TIMELINE
+                 ================================================================= -->
+            <div id="tab-match-center" class="tab-content-section hidden">
+                <section class="stadium-radar-panel">
+                    <div class="panel-header-row">
+                        <h2>⚽ Live Matchday Timeline & Stadium Atmosphere</h2>
+                        <span style="font-size: 0.85rem; color: #94a3b8;">Real-time match events, stats & crowd sound</span>
+                    </div>
+
+                    <div class="fan-hub-grid">
+                        <div class="fan-card">
+                            <h3>Match Events Feed</h3>
+                            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem;">
+                                <div style="display: flex; gap: 12px; background: rgba(16,185,129,0.15); border: 1px solid #10b981; padding: 10px; border-radius: 10px;">
+                                    <b>78'</b> <span>⚽ <b>GOAL!</b> Vinícius Jr scores for Brazil (Brazil 2 - 1 Argentina)</span>
+                                </div>
+                                <div style="display: flex; gap: 12px; background: rgba(245,158,11,0.15); border: 1px solid #f59e0b; padding: 10px; border-radius: 10px;">
+                                    <b>62'</b> <span>🟨 <b>Yellow Card:</b> Rodrigo De Paul (Argentina)</span>
+                                </div>
+                                <div style="display: flex; gap: 12px; background: rgba(16,185,129,0.15); border: 1px solid #10b981; padding: 10px; border-radius: 10px;">
+                                    <b>41'</b> <span>⚽ <b>GOAL!</b> Lionel Messi equalizer for Argentina (1 - 1)</span>
+                                </div>
+                                <div style="display: flex; gap: 12px; background: rgba(16,185,129,0.15); border: 1px solid #10b981; padding: 10px; border-radius: 10px;">
+                                    <b>18'</b> <span>⚽ <b>GOAL!</b> Rodrygo opener for Brazil (1 - 0)</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <button type="button" id="crowdCheerBtn" class="btn-primary-action" style="flex: 1; justify-content: center;">🎉 Stadium Roar SFX</button>
+                                <button type="button" id="refereeWhistleBtn" class="btn-secondary-action" style="flex: 1; justify-content: center; margin-left: 0;">📣 Ref Whistle SFX</button>
+                            </div>
+                        </div>
+
+                        <div class="fan-card">
+                            <h3>Match Statistics & Crowd Energy</h3>
+                            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem;">
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                        <span>Possession: Brazil 54%</span>
+                                        <span>Argentina 46%</span>
+                                    </div>
+                                    <div style="height: 8px; background: #3b82f6; border-radius: 4px; overflow: hidden; display: flex;">
+                                        <div style="width: 54%; background: #10b981;"></div>
+                                        <div style="width: 46%; background: #38bdf8;"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                        <span>Shots on Target: 6</span>
+                                        <span>Shots on Target: 5</span>
+                                    </div>
+                                    <div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                        <div style="width: 55%; height: 100%; background: #f59e0b;"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                        <span>Stadium Crowd Noise (Decibels)</span>
+                                        <span style="color: #6ee7b7; font-weight: 700;">96.4 dB (Electric)</span>
+                                    </div>
+                                    <div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                        <div style="width: 88%; height: 100%; background: #ec4899;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px; margin-top: 10px; font-size: 0.85rem; color: #94a3b8;">
+                                💡 <b>AI Match Commentary:</b> Fast-paced end-to-end quarter-final. High turnstile exit volume expected at 90+4'.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- =================================================================
+                 TAB 4: DIGITAL TICKET WALLET
                  ================================================================= -->
             <div id="tab-ticket-wallet" class="tab-content-section hidden">
                 <section class="stadium-radar-panel">
@@ -417,6 +494,7 @@
                             </div>
                             <div style="display: flex; gap: 10px;">
                                 <button type="button" id="savePassBtn" class="btn-primary-action" style="flex: 1; justify-content: center;">📥 Save Pass</button>
+                                <button type="button" id="nfcTapBtn" class="btn-primary-action" style="flex: 1; justify-content: center; background: #06b6d4;">📱 NFC Gate Tap</button>
                                 <button type="button" id="guideToSeatBtn" class="btn-secondary-action" style="flex: 1; justify-content: center; margin-left: 0;">🧭 Guide to Seat</button>
                             </div>
                         </div>
@@ -443,7 +521,7 @@
             </div>
 
             <!-- =================================================================
-                 TAB 4: CONCESSIONS & FOOD ORDERING
+                 TAB 5: CONCESSIONS & FOOD ORDERING
                  ================================================================= -->
             <div id="tab-concessions" class="tab-content-section hidden">
                 <section class="stadium-radar-panel">
@@ -461,7 +539,7 @@
                                         <b>⚽ World Cup Match Combo</b>
                                         <p style="font-size: 0.8rem; color: #94a3b8;">Gourmet Burger + Herb Fries + Zero-Waste Drink</p>
                                     </div>
-                                    <button type="button" class="btn-primary-action add-snack-btn" data-item="World Cup Match Combo ($14)" style="padding: 6px 14px; font-size: 0.85rem;">$14</button>
+                                    <button type="button" class="btn-primary-action add-snack-btn" data-item="World Cup Match Combo" data-price="14" style="padding: 6px 14px; font-size: 0.85rem;">$14</button>
                                 </div>
 
                                 <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px;">
@@ -469,7 +547,7 @@
                                         <b>🌮 Stadium Artisanal Nachos</b>
                                         <p style="font-size: 0.8rem; color: #94a3b8;">Warm Queso, Jalapeños & Fresh Guacamole</p>
                                     </div>
-                                    <button type="button" class="btn-primary-action add-snack-btn" data-item="Stadium Artisanal Nachos ($11)" style="padding: 6px 14px; font-size: 0.85rem;">$11</button>
+                                    <button type="button" class="btn-primary-action add-snack-btn" data-item="Stadium Artisanal Nachos" data-price="11" style="padding: 6px 14px; font-size: 0.85rem;">$11</button>
                                 </div>
 
                                 <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px;">
@@ -477,19 +555,26 @@
                                         <b>🥤 Chilled Electrolyte Eco-Drink</b>
                                         <p style="font-size: 0.8rem; color: #94a3b8;">100% Recyclable Souvenir Cup with Free Refills</p>
                                     </div>
-                                    <button type="button" class="btn-primary-action add-snack-btn" data-item="Chilled Electrolyte Eco-Drink ($6)" style="padding: 6px 14px; font-size: 0.85rem;">$6</button>
+                                    <button type="button" class="btn-primary-action add-snack-btn" data-item="Chilled Electrolyte Eco-Drink" data-price="6" style="padding: 6px 14px; font-size: 0.85rem;">$6</button>
                                 </div>
                             </div>
                         </div>
 
                         <div class="fan-card">
                             <h3>Express Pickup Cart</h3>
-                            <div id="cartItemsList" style="min-height: 120px; background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px; color: #94a3b8; font-size: 0.9rem;">
+                            <div id="cartItemsList" style="min-height: 100px; background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px; color: #94a3b8; font-size: 0.9rem;">
                                 No items in your express cart yet. Click any menu item to add.
                             </div>
+                            
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="promoCodeInput" placeholder="Promo code (e.g. FIFA2026)" style="flex: 1; padding: 8px 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 0.85rem;">
+                                <button type="button" id="applyPromoBtn" class="btn-secondary-action" style="padding: 8px 14px; margin-left: 0; font-size: 0.85rem;">Apply</button>
+                            </div>
+                            <div id="promoMsg" style="font-size: 0.8rem; min-height: 18px;"></div>
+
                             <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; color: #fff;">
-                                <span>Estimated Pickup Wait:</span>
-                                <span style="color: #6ee7b7;">2 Minutes</span>
+                                <span>Total Price:</span>
+                                <span id="cartTotalDisplay" style="color: #6ee7b7;">$0.00</span>
                             </div>
                             <button type="button" id="placeOrderBtn" class="btn-primary-action" style="width: 100%; justify-content: center;">🚀 Order for Concourse Pickup</button>
                         </div>
@@ -498,7 +583,7 @@
             </div>
 
             <!-- =================================================================
-                 TAB 5: FAN TRIVIA & ECO-REWARDS
+                 TAB 6: FAN TRIVIA & ECO-REWARDS
                  ================================================================= -->
             <div id="tab-trivia" class="tab-content-section hidden">
                 <section class="stadium-radar-panel">

@@ -1,5 +1,76 @@
 document.addEventListener('DOMContentLoaded', function() {
     // ---------------------------------------------------------
+    // 0. WEB AUDIO API SYNTHESIZER FOR SOUND EFFECTS
+    // ---------------------------------------------------------
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function getAudioContext() {
+        if (!audioCtx) {
+            audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        return audioCtx;
+    }
+
+    function playTone(freq, type, duration, delay = 0) {
+        try {
+            const ctx = getAudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+            gain.gain.setValueAtTime(0.15, ctx.currentTime + delay);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + delay);
+            osc.stop(ctx.currentTime + delay + duration);
+        } catch (e) {
+            console.log('Audio SFX error:', e);
+        }
+    }
+
+    function playChime() {
+        playTone(587.33, 'sine', 0.2, 0);    // D5
+        playTone(880.00, 'sine', 0.3, 0.15); // A5
+    }
+
+    function playWhistle() {
+        playTone(1760.00, 'triangle', 0.4, 0);
+        playTone(1975.53, 'triangle', 0.5, 0.1);
+    }
+
+    function playCheer() {
+        // Noise buffer cheer simulation
+        try {
+            const ctx = getAudioContext();
+            const bufferSize = ctx.sampleRate * 1.5;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 800;
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            noise.start();
+        } catch (e) {
+            console.log('Cheer SFX:', e);
+        }
+    }
+
+    // ---------------------------------------------------------
     // 1. TAB NAVIGATION SWITCHER
     // ---------------------------------------------------------
     const navTabs = document.querySelectorAll('.nav-tab-btn');
@@ -473,6 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (agentStatus) agentStatus.textContent = '✅ AI Agent: Execution Complete!';
                         addLog('✅ Service completed successfully!');
                         displayResponse(result);
+                        playChime();
                         return;
                     }
                 }
@@ -490,6 +562,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     timestamp: new Date().toISOString()
                 };
                 displayResponse(fallbackResult);
+                playChime();
             } finally {
                 if (processing) processing.classList.add('hidden');
                 if (submitBtn) {
@@ -581,12 +654,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ---------------------------------------------------------
-    // 12. DIGITAL TICKET PASS SIMULATOR (TAB 3)
+    // 12. MATCH CENTER SFX BUTTONS (TAB 3)
+    // ---------------------------------------------------------
+    const crowdCheerBtn = document.getElementById('crowdCheerBtn');
+    const refereeWhistleBtn = document.getElementById('refereeWhistleBtn');
+
+    if (crowdCheerBtn) {
+        crowdCheerBtn.addEventListener('click', function() {
+            playCheer();
+        });
+    }
+    if (refereeWhistleBtn) {
+        refereeWhistleBtn.addEventListener('click', function() {
+            playWhistle();
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 13. DIGITAL TICKET PASS & NFC TAP SIMULATOR (TAB 4)
     // ---------------------------------------------------------
     const updatePassBtn = document.getElementById('updatePassBtn');
     const ticketSeatDisplay = document.getElementById('ticketSeatDisplay');
     const customSection = document.getElementById('customSection');
     const savePassBtn = document.getElementById('savePassBtn');
+    const nfcTapBtn = document.getElementById('nfcTapBtn');
     const guideToSeatBtn = document.getElementById('guideToSeatBtn');
 
     if (updatePassBtn && ticketSeatDisplay && customSection) {
@@ -594,6 +685,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const val = customSection.value.trim();
             if (val) {
                 ticketSeatDisplay.textContent = val;
+                playChime();
                 alert('✅ Matchday Ticket Pass Updated Successfully!');
             }
         });
@@ -601,7 +693,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (savePassBtn) {
         savePassBtn.addEventListener('click', function() {
+            playChime();
             alert('📥 FIFA 2026 Matchday Pass saved to digital device wallet!');
+        });
+    }
+
+    if (nfcTapBtn) {
+        nfcTapBtn.addEventListener('click', function() {
+            playChime();
+            alert('📱 NFC SMART GATE VERIFIED\n\n✅ Turnstile Barrier Opened: Gate 4 (East Grandstand)\nWelcome to the Match!');
         });
     }
 
@@ -627,17 +727,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ---------------------------------------------------------
-    // 13. CONCESSIONS CART & FOOD ORDERING (TAB 4)
+    // 14. CONCESSIONS CART & PROMO CODE ENGINE (TAB 5)
     // ---------------------------------------------------------
     const addSnackBtns = document.querySelectorAll('.add-snack-btn');
     const cartItemsList = document.getElementById('cartItemsList');
+    const cartTotalDisplay = document.getElementById('cartTotalDisplay');
+    const promoCodeInput = document.getElementById('promoCodeInput');
+    const applyPromoBtn = document.getElementById('applyPromoBtn');
+    const promoMsg = document.getElementById('promoMsg');
     const placeOrderBtn = document.getElementById('placeOrderBtn');
+
     let cart = [];
+    let discountPercent = 0;
 
     addSnackBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            const item = this.dataset.item;
-            cart.push(item);
+            const name = this.dataset.item;
+            const price = parseFloat(this.dataset.price) || 0;
+            cart.push({ name, price });
+            playChime();
             renderCart();
         });
     });
@@ -646,14 +754,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!cartItemsList) return;
         if (cart.length === 0) {
             cartItemsList.textContent = 'No items in your express cart yet. Click any menu item to add.';
+            if (cartTotalDisplay) cartTotalDisplay.textContent = '$0.00';
             return;
         }
+
+        let rawTotal = cart.reduce((sum, item) => sum + item.price, 0);
+        let discountedTotal = rawTotal * (1 - discountPercent / 100);
+
         cartItemsList.innerHTML = cart.map((item, idx) => `
             <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
-                <span>🍔 ${item}</span>
+                <span>🍔 ${item.name} ($${item.price.toFixed(2)})</span>
                 <span style="cursor:pointer; color:#ef4444; font-weight:700;" onclick="removeItem(${idx})">✕</span>
             </div>
         `).join('');
+
+        if (cartTotalDisplay) {
+            cartTotalDisplay.textContent = `$${discountedTotal.toFixed(2)}`;
+        }
     }
 
     window.removeItem = function(idx) {
@@ -661,20 +778,36 @@ document.addEventListener('DOMContentLoaded', function() {
         renderCart();
     };
 
+    if (applyPromoBtn && promoCodeInput && promoMsg) {
+        applyPromoBtn.addEventListener('click', function() {
+            const code = promoCodeInput.value.trim().toUpperCase();
+            if (code === 'FIFA2026' || code === 'MATCH15') {
+                discountPercent = 15;
+                promoMsg.innerHTML = '<span style="color:#6ee7b7;">🎉 Promo FIFA2026 applied! 15% Matchday discount activated.</span>';
+                playChime();
+                renderCart();
+            } else {
+                promoMsg.innerHTML = '<span style="color:#f87171;">❌ Invalid promo code. Try "FIFA2026" for 15% off.</span>';
+            }
+        });
+    }
+
     if (placeOrderBtn) {
         placeOrderBtn.addEventListener('click', function() {
             if (cart.length === 0) {
                 alert('Please select at least one refreshment from the menu.');
                 return;
             }
-            alert(`🎉 Express Order Confirmed!\n\n${cart.join('\n')}\n\nPickup Ready at Concourse Food Stall 4 in 2 minutes.`);
+            playChime();
+            const total = cartTotalDisplay ? cartTotalDisplay.textContent : '$0.00';
+            alert(`🎉 Express Order Confirmed (${total})!\n\n${cart.map(i => '• ' + i.name).join('\n')}\n\nPickup Ready at Concourse Food Stall 4 in 2 minutes.`);
             cart = [];
             renderCart();
         });
     }
 
     // ---------------------------------------------------------
-    // 14. FAN TRIVIA & ECO-REWARDS (TAB 5)
+    // 15. FAN TRIVIA & ECO-REWARDS (TAB 6)
     // ---------------------------------------------------------
     const triviaBtns = document.querySelectorAll('.trivia-option-btn');
     const triviaResult = document.getElementById('triviaResult');
@@ -694,6 +827,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (triviaResult) {
                     triviaResult.innerHTML = '<span style="color:#6ee7b7;">🎉 Correct! Brazil has won 5 FIFA World Cups (+50 Fan Points earned!).</span>';
                 }
+                playChime();
             } else {
                 this.style.background = 'rgba(239,68,68,0.3)';
                 this.style.borderColor = '#ef4444';
