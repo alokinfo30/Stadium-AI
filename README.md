@@ -1,216 +1,160 @@
-# Stadium-AI
-Complete AI-Powered Stadium Operations &amp; Fan Experience Platform for FIFA World Cup 2026
+<div align="center">
 
+# 🏟️ AI Stadium Assistant
+### Complete Autonomous AI-Powered Stadium Operations & Fan Experience Platform
+**FIFA World Cup 2026™ Edition**
 
-StadiumAI/
+<br/>
+
+<img src="https://img.shields.io/badge/FIFA%20World%20Cup-2026-F59E0B?style=for-the-badge&logo=fifa&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/CrewAI-Multi--Agent-10B981?style=for-the-badge&logo=openai&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/Multi--Model-Auto--Fallback-06B6D4?style=for-the-badge&logo=fastapi&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/Speech%20AI-Voice%20%26%20TTS-EC4899?style=for-the-badge&logo=google&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+
+<br/><br/>
+
+</div>
+
+---
+
+## 🌟 Overview
+
+**AI Stadium Assistant** is an enterprise-grade, autonomous multi-agent platform designed for the **FIFA World Cup 2026**. Built with **CrewAI**, **OpenRouter Multi-Model Routing**, and **Flask**, it orchestrates 7 specialized AI agents to deliver real-time stadium navigation, crowd density management, 100% inclusive accessibility, multimodal transit guidance, sustainability metrics, instant multilingual voice translation, and command-level operational intelligence.
+
+---
+
+## 🤖 The 7 Autonomous AI Agents
+
+```mermaid
+graph TD
+    User([⚽ Fan / Stadium Operator]) --> Hub[🏟️ AI Stadium Assistant Engine]
+    
+    Hub --> Nav[🧭 Navigation & 3D Wayfinder Agent]
+    Hub --> Crowd[👥 Dynamic Crowd Sentinel Agent]
+    Hub --> Access[♿ Inclusive Accessibility & Sensory Agent]
+    Hub --> Transit[🚌 Multimodal Transportation Dispatcher]
+    Hub --> Green[🌱 Zero-Waste Sustainability Tracker]
+    Hub --> Voice[🌐 Real-Time Multilingual & TTS Agent]
+    Hub --> Ops[📊 Command Operational Telemetry Agent]
+    
+    Nav --> Models[⚡ OpenRouter Multi-Model Fallback Chain]
+    Crowd --> Models
+    Access --> Models
+    Transit --> Models
+    Green --> Models
+    Voice --> Models
+    Ops --> Models
+    
+    Models --> GPT[OpenAI GPT-4o-mini]
+    Models --> Mistral[Mistral Mixtral 8x22B]
+    Models --> Llama[Meta Llama 3.3]
+    Models --> DeepSeek[DeepSeek V3 / Chat]
+```
+
+1. **🧭 Smart Wayfinder & Seat Navigator**: Turn-by-turn route guidance to seats, gates, elevators, and amenities with exact walking duration and accessibility options.
+2. **👥 Dynamic Crowd Sentinel**: Live concourse crowd density analytics, turnstile throughput telemetry, bottleneck evasion, and emergency egress routing.
+3. **♿ Inclusive Accessibility Concierge**: Step-free ramp locator, priority elevator audio cues, Braille routes, and sensory calm pod reservations (Suite 104).
+4. **🚌 Multimodal Transit Dispatcher**: Real-time Metro Line 1 departures, express park-and-ride shuttle status, rideshare pickup bays, and post-match traffic clearance.
+5. **🌱 Zero-Waste & Green Stadium Tracker**: Water refill station locator, stadium solar canopy telemetry (1.4 MW), compostable concession packaging, and fan eco-rewards.
+6. **🌐 Real-Time Multilingual Speech & Text Agent**: Speech recognition input and text-to-speech audio synthesis across 10 languages (EN, ES, FR, DE, PT, AR, HI, ZH, JA, KO).
+7. **📊 Matchday Operational Command Telemetry**: Concourse flow telemetry, turnstile wait dissipation pacing, and automated medical/security marshal dispatch.
+
+---
+
+## ⚡ Multi-Model Intelligence & Fallback Chain
+
+| Agent Service | Primary AI Model | Auto-Fallback Model | Specialization |
+|---|---|---|---|
+| **Wayfinder & Navigation** | `openai/gpt-4o-mini` | `mistralai/mixtral-8x22b` | Spatial logic, step-by-step pathing |
+| **Crowd Sentinel** | `mistralai/mixtral-8x22b` | `meta-llama/llama-3.3-70b` | Density calculations, bottleneck risk |
+| **Accessibility Concierge** | `meta-llama/llama-3.3-70b` | `openai/gpt-4o-mini` | ADA compliance, sensory guidelines |
+| **Transit Dispatcher** | `deepseek/deepseek-chat` | `openai/gpt-4o-mini` | Route optimization, shuttle ETAs |
+| **Green Tracker** | `openai/gpt-4o-mini` | `mistralai/mixtral-8x22b` | Solar metrics, carbon offset analytics |
+| **Multilingual Voice** | `mistralai/mixtral-8x22b` | `openai/gpt-4o-mini` | High-fidelity translation & idioms |
+| **Operational Telemetry** | `meta-llama/llama-3.3-70b` | `deepseek/deepseek-chat` | High-throughput telemetry synthesis |
+
+---
+
+## 🛠️ Project Structure
+
+```
+Stadium-AI/
 ├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── model_manager.py
-│   ├── agents.py
-│   ├── tasks.py
-│   ├── crew.py
-│   ├── models.py
-│   ├── tools.py
-│   └── utils.py
-├── config/
-│   ├── agents.yaml
-│   └── tasks.yaml
+│   ├── __init__.py          # Flask app initialization
+│   ├── main.py              # Blueprint routes, APIs, and sanitize handlers
+│   ├── model_manager.py     # OpenRouter multi-model manager with fallback
+│   ├── agents.py            # CrewAI agent declarations
+│   ├── tasks.py             # CrewAI task orchestrations
+│   ├── crew.py              # StadiumAICrew sequential pipeline
+│   ├── models.py            # Pydantic validation schemas
+│   └── utils.py             # Telemetry & helper utilities
+├── public/                  # Netlify / CDN static web distribution bundle
+│   ├── _redirects           # Single Page Application routing rules
+│   ├── index.html           # Pre-rendered World Cup UI with Live Radar
+│   ├── css/style.css        # Cyberpunk Stadium glassmorphism theme
+│   └── js/script.js         # 100% functional Web Speech, TTS, & Agent Engine
 ├── templates/
-│   └── index.html
+│   └── index.html           # Flask Jinja2 template
 ├── static/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── script.js
-├── data/
-│   └── .gitkeep
-├── .env
-├── .gitignore
-├── requirements.txt
-├── run.py
-└── README.md
+│   ├── css/style.css        # Production stylesheet
+│   └── js/script.js         # Frontend interactive controller
+├── .python-version          # Python 3.11 runtime lock
+├── runtime.txt              # Cloud build runtime configuration
+├── netlify.toml             # Netlify deployment configuration
+├── requirements.txt         # Modern pinned dependencies with prebuilt wheels
+├── run.py                   # Application entrypoint
+└── README.md                # Project documentation
+```
 
+---
 
+## 🚀 Quickstart & Local Installation
 
+### Prerequisites
+- Python 3.10 - 3.13 (Recommended: **Python 3.11.9**)
+- Git
 
-
-# 🏟️ AI Stadium Assistant - FIFA World Cup 2026
-
-An AI-powered solution enhancing stadium operations and fan experience during the FIFA World Cup 2026.
-
-## Features
-
-- 🧭 **Smart Navigation**: Find seats, facilities, and points of interest
-- 👥 **Crowd Management**: Real-time crowd insights and safety alerts
-- ♿ **Accessibility**: Inclusive access information for all fans
-- 🚌 **Transportation**: Optimized transport options to and from the stadium
-- 🌱 **Sustainability**: Eco-friendly tips and practices
-- 🌐 **Multilingual**: Support for 10+ languages
-- 📊 **Operational Intelligence**: Real-time insights for staff
-
-## Architecture
-
-### AI Agents
-
-1. **Navigation Agent**: Provides wayfinding and directions
-2. **Crowd Management Agent**: Analyzes crowd patterns and provides alerts
-3. **Accessibility Agent**: Ensures inclusive access for all fans
-4. **Transportation Agent**: Optimizes transport options
-5. **Sustainability Agent**: Promotes eco-friendly practices
-6. **Multilingual Agent**: Provides language translation
-7. **Operational Intelligence Agent**: Delivers real-time operational insights
-
-### Technology Stack
-
-- **CrewAI** - Multi-agent orchestration
-- **OpenRouter** - Multi-model support with auto-fallback
-- **Flask** - Web framework
-- **Pydantic** - Data validation
-- **HTML/CSS/JS** - Responsive frontend
-
-### Models Used
-
-| Model | Provider | Use Case |
-|-------|----------|----------|
-| `openai/gpt-4o-mini` | OpenAI | Navigation, Sustainability |
-| `mistralai/mixtral-8x22b-instruct` | Mistral | Crowd Management, Multilingual |
-| `meta-llama/llama-3.1-8b-instruct` | Meta | Accessibility, Operational |
-| `deepseek/deepseek-chat` | DeepSeek | Transportation |
-
-## Installation
-
+### 1. Clone & Setup Virtual Environment
 ```bash
-# 1. Clone the repository
-git clone <repository-url>
-cd StadiumAI
+git clone https://github.com/alokinfo30/Stadium-AI.git
+cd Stadium-AI
 
-# 2. Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# On Windows PowerShell:
+.\venv\Scripts\Activate.ps1
+# On Linux/macOS:
+source venv/bin/activate
+```
 
-# 3. Ensure you have Python 3.10 - 3.13. You can check with:
-# python --version
-
-# 3. Install dependencies
+### 2. Install Dependencies
+```bash
 pip install -r requirements.txt
+```
 
-# 4. Create .env file with your OpenRouter API key
-# (see .env.example for template)
+### 3. Configure Environment Variables
+Create a `.env` file in the root directory:
+```env
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+FLASK_ENV=development
+FLASK_DEBUG=1
+SUPPORTED_LANGUAGES=en,es,fr,de,pt,ar,hi,zh,ja,ko
+```
 
-# 5. Run the application
+### 4. Launch Application
+```bash
 python run.py
+```
+Open your browser at **`http://localhost:5000`** to access the live FIFA World Cup 2026 AI Stadium Assistant.
 
+---
 
+## 🌐 Deploying to Production
 
+- **Netlify / Static CDN:** Automatic zero-config deployment from `public/` directory with instant client-side AI fallback.
+- **Render / Railway / Heroku:** Runs `gunicorn run:app --bind 0.0.0.0:$PORT` on Python 3.11.9.
 
+---
 
-Configuration
-
-
-Environment Variables
-
-Variable	Description
-OPENROUTER_API_KEY	Your OpenRouter API key
-OPENROUTER_PRIMARY_MODEL	Primary model to use
-OPENROUTER_FALLBACK_MODELS	Fallback models
-STADIUM_NAME	Stadium name
-STADIUM_CAPACITY	Stadium capacity
-SUPPORTED_LANGUAGES	Comma-separated language codes
-
-
-API Endpoints
-
-Endpoint	Method	Description
-/	GET	Web interface
-/api/service	POST	Handle service request
-/api/services	GET	List all services
-/api/models	GET	List available models
-/api/health	GET	Health check
-
-
-Service Types
-
-navigation - Wayfinding and directions
-crowd_management - Crowd insights and alerts
-accessibility - Accessibility information
-transportation - Transport options
-sustainability - Eco-friendly tips
-multilingual - Language translation
-operational - Operational insights
-
-
-
-This file ensures the data directory is tracked in git
-text
-
-## Step 18: Final Commands
-
-```powershell
-# 1. Create virtual environment
-python -m venv venv
-
-# 2. Activate it
-venv\Scripts\Activate.ps1
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Add your OpenRouter API key to .env
-
-# 5. Run the application
-python run.py
-
-# 6. Open browser
-# http://localhost:5000
-
-Summary
-This complete FIFA World Cup 2026 Stadium AI Assistant provides:
-
-✅ Features:
-
-7 Specialized AI Agents for different stadium services
-10+ Languages support for international fans
-Real-time Assistance for navigation, crowd management, and more
-Auto-Fallback between 4 different models
-Responsive Design for mobile and desktop
-Export and Copy functionality
-Real-time Status Updates during processing
-
-
-
-✅ Services:
-
-🧭 Navigation - Find your way around the stadium
-👥 Crowd Management - Real-time crowd insights and alerts
-♿ Accessibility - Inclusive access information
-🚌 Transportation - Transport options to and from the stadium
-🌱 Sustainability - Eco-friendly tips and practices
-🌐 Multilingual - Translate to your preferred language
-📊 Operational Intelligence - Real-time operational insights
-
-
-✅ Technology Stack:
-
-CrewAI for multi-agent orchestration
-OpenRouter for multi-model support
-Flask for web interface
-Pydantic for data validation
-
-
-✅ Deployment Ready:
-
-Works with Render, Heroku
-Environment variable configuration
-Complete error handling
-Responsive for all devices
-
-## CI/CD
-
-- CI workflow runs tests, linting, and security scanning on pushes and pull requests.
-- CD workflow deploys on pushes to main/master to the production environment.
-- CD workflow also deploys pull requests to a preview environment when a deployment hook is configured.
-
-To enable deployment, add a secret named RENDER_DEPLOY_HOOK_URL with your platform deployment hook.
-
-The platform is ready to enhance the FIFA World Cup 2026 experience! ⚽🏟️
+## 📄 License & Credits
+Developed by **[Alok Srivastava](https://github.com/alokinfo30)** for the **FIFA World Cup 2026™ AI Innovation Platform**.
