@@ -1,5 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
+    // ---------------------------------------------------------
+    // 1. TAB NAVIGATION SWITCHER
+    // ---------------------------------------------------------
+    const navTabs = document.querySelectorAll('.nav-tab-btn');
+    const tabSections = document.querySelectorAll('.tab-content-section');
+
+    navTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            navTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            const targetTabId = `tab-${this.dataset.tab}`;
+            tabSections.forEach(section => {
+                if (section.id === targetTabId) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        });
+    });
+
+    // ---------------------------------------------------------
+    // 2. DOM ELEMENTS (AI AGENT HUB)
+    // ---------------------------------------------------------
     const serviceGrid = document.getElementById('serviceGrid');
     const inputSection = document.getElementById('inputSection');
     const serviceTitle = document.getElementById('serviceTitle');
@@ -55,14 +80,20 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     };
 
-    // 1. Zone Radar Interactive Click
-    document.querySelectorAll('.zone-radar-card').forEach(card => {
+    // ---------------------------------------------------------
+    // 3. ZONE RADAR INTERACTIVE CLICKS
+    // ---------------------------------------------------------
+    document.querySelectorAll('.zone-box-card').forEach(card => {
         card.addEventListener('click', function() {
-            document.querySelectorAll('.zone-radar-card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.zone-box-card').forEach(c => c.classList.remove('active'));
             this.classList.add('active');
             const zoneName = this.dataset.zone;
-            
-            const navCard = document.querySelector('.service-card[data-service="navigation"]');
+
+            // Switch to AI hub tab and trigger Wayfinder
+            const aiTabBtn = document.querySelector('.nav-tab-btn[data-tab="ai-hub"]');
+            if (aiTabBtn) aiTabBtn.click();
+
+            const navCard = document.querySelector('.agent-service-card[data-service="navigation"]');
             if (navCard) {
                 selectService(navCard);
                 setTimeout(() => {
@@ -80,27 +111,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 2. Quick Search Bar Natural Language Routing
+    // ---------------------------------------------------------
+    // 4. NATURAL LANGUAGE QUICK SEARCH BAR
+    // ---------------------------------------------------------
     if (quickSearchInput) {
         quickSearchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const query = this.value.trim().toLowerCase();
                 if (!query) return;
-                
+
                 let targetService = 'navigation';
-                if (query.includes('crowd') || query.includes('busy') || query.includes('queue') || query.includes('wait')) {
+                if (query.includes('crowd') || query.includes('busy') || query.includes('queue') || query.includes('wait') || query.includes('line')) {
                     targetService = 'crowd_management';
-                } else if (query.includes('wheelchair') || query.includes('access') || query.includes('ramp') || query.includes('elevator') || query.includes('blind') || query.includes('deaf')) {
+                } else if (query.includes('wheelchair') || query.includes('access') || query.includes('ramp') || query.includes('elevator') || query.includes('blind') || query.includes('deaf') || query.includes('sensory')) {
                     targetService = 'accessibility';
-                } else if (query.includes('metro') || query.includes('bus') || query.includes('taxi') || query.includes('shuttle') || query.includes('train') || query.includes('parking')) {
+                } else if (query.includes('metro') || query.includes('bus') || query.includes('taxi') || query.includes('shuttle') || query.includes('train') || query.includes('parking') || query.includes('uber')) {
                     targetService = 'transportation';
-                } else if (query.includes('water') || query.includes('recycle') || query.includes('eco') || query.includes('green') || query.includes('waste')) {
+                } else if (query.includes('water') || query.includes('recycle') || query.includes('eco') || query.includes('green') || query.includes('waste') || query.includes('solar')) {
                     targetService = 'sustainability';
-                } else if (query.includes('translate') || query.includes('spanish') || query.includes('french') || query.includes('language') || query.includes('hindi')) {
+                } else if (query.includes('translate') || query.includes('spanish') || query.includes('french') || query.includes('language') || query.includes('hindi') || query.includes('arabic')) {
                     targetService = 'multilingual';
                 }
 
-                const card = document.querySelector(`.service-card[data-service="${targetService}"]`);
+                const aiTabBtn = document.querySelector('.nav-tab-btn[data-tab="ai-hub"]');
+                if (aiTabBtn) aiTabBtn.click();
+
+                const card = document.querySelector(`.agent-service-card[data-service="${targetService}"]`);
                 if (card) {
                     selectService(card);
                     setTimeout(() => {
@@ -115,7 +151,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 3. Voice Microphone Input (Speech Recognition)
+    // ---------------------------------------------------------
+    // 5. VOICE MICROPHONE INPUT (WEB SPEECH RECOGNITION API)
+    // ---------------------------------------------------------
     if (voiceMicBtn && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
@@ -132,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     recognition.start();
                     voiceMicBtn.classList.add('recording');
                     isRecording = true;
-                    if (quickSearchInput) quickSearchInput.placeholder = '🎙️ Listening... Speak your query now!';
+                    if (quickSearchInput) quickSearchInput.placeholder = '🎙️ Listening to voice query... Speak now!';
                 } catch (e) {
                     console.error('Speech recognition error:', e);
                 }
@@ -162,18 +200,23 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // 4. SOS Emergency Dispatcher
+    // ---------------------------------------------------------
+    // 6. SOS EMERGENCY MARSHAL DISPATCH
+    // ---------------------------------------------------------
     if (sosEmergencyBtn) {
         sosEmergencyBtn.addEventListener('click', function() {
-            const confirmed = confirm('🚨 FIFA World Cup Stadium Emergency Alert\n\nDispatch Immediate Stadium Medical & Security Marshals to your location?\n\nClick OK to confirm emergency dispatch.');
+            const confirmed = confirm('🚨 FIFA WORLD CUP STADIUM EMERGENCY DISPATCH\n\nDispatch Immediate Stadium Medical & Security Marshals to your exact geo-location?\n\nClick OK to confirm priority alert.');
             if (confirmed) {
-                const card = document.querySelector('.service-card[data-service="operational"]');
+                const aiTabBtn = document.querySelector('.nav-tab-btn[data-tab="ai-hub"]');
+                if (aiTabBtn) aiTabBtn.click();
+
+                const card = document.querySelector('.agent-service-card[data-service="operational"]');
                 if (card) {
                     selectService(card);
                     setTimeout(() => {
                         const dataInput = document.getElementById('data');
                         if (dataInput) {
-                            dataInput.value = '🚨 PRIORITY 1 SOS: Fan emergency assistance request triggered at Gate 1 / Concourse Level 1. Immediate Medical & Security dispatch required.';
+                            dataInput.value = '🚨 PRIORITY 1 SOS ALERT: Fan medical/security assistance requested at Gate 4 / East Grandstand Sector. Immediate marshal dispatch initiated.';
                         }
                         serviceForm.dispatchEvent(new Event('submit'));
                     }, 100);
@@ -182,23 +225,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 5. Select Service
-    serviceGrid.addEventListener('click', function(e) {
-        const card = e.target.closest('.service-card');
-        if (!card) return;
-        selectService(card);
-    });
+    // ---------------------------------------------------------
+    // 7. SELECT AI SERVICE & FORM RENDERING
+    // ---------------------------------------------------------
+    if (serviceGrid) {
+        serviceGrid.addEventListener('click', function(e) {
+            const card = e.target.closest('.agent-service-card');
+            if (!card) return;
+            selectService(card);
+        });
 
-    serviceGrid.addEventListener('keydown', function(e) {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const card = e.target.closest('.service-card');
-        if (!card) return;
-        e.preventDefault();
-        selectService(card);
-    });
+        serviceGrid.addEventListener('keydown', function(e) {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            const card = e.target.closest('.agent-service-card');
+            if (!card) return;
+            e.preventDefault();
+            selectService(card);
+        });
+    }
 
     function selectService(card) {
-        document.querySelectorAll('.service-card').forEach(c => {
+        document.querySelectorAll('.agent-service-card').forEach(c => {
             c.classList.remove('selected');
             c.setAttribute('aria-pressed', 'false');
         });
@@ -210,13 +257,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showForm(serviceKey) {
         const serviceName = serviceFieldsConfig[serviceKey] ? serviceKey.replace('_', ' ').toUpperCase() : 'SERVICE';
-        serviceTitle.textContent = `📋 ${serviceName} AI Request`;
-        serviceFields.innerHTML = '';
+        if (serviceTitle) serviceTitle.textContent = `📋 ${serviceName} AI Request`;
+        if (serviceFields) serviceFields.innerHTML = '';
 
         const fields = serviceFieldsConfig[serviceKey] || [];
         fields.forEach(field => {
             const group = document.createElement('div');
-            group.className = 'form-group';
+            group.className = 'form-group-item';
             const label = document.createElement('label');
             label.htmlFor = field.name;
             label.textContent = field.label;
@@ -251,31 +298,37 @@ document.addEventListener('DOMContentLoaded', function() {
             serviceFields.appendChild(group);
         });
 
-        inputSection.classList.remove('hidden');
-        inputSection.scrollIntoView({ behavior: 'smooth' });
+        if (inputSection) {
+            inputSection.classList.remove('hidden');
+            inputSection.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
     if (backBtn) {
         backBtn.addEventListener('click', function() {
-            inputSection.classList.add('hidden');
-            results.classList.add('hidden');
-            document.querySelectorAll('.service-card').forEach(c => {
+            if (inputSection) inputSection.classList.add('hidden');
+            if (results) results.classList.add('hidden');
+            document.querySelectorAll('.agent-service-card').forEach(c => {
                 c.classList.remove('selected');
                 c.setAttribute('aria-pressed', 'false');
             });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 100, behavior: 'smooth' });
         });
     }
 
     if (newRequestBtn) {
         newRequestBtn.addEventListener('click', function() {
-            results.classList.add('hidden');
-            inputSection.classList.remove('hidden');
-            inputSection.scrollIntoView({ behavior: 'smooth' });
+            if (results) results.classList.add('hidden');
+            if (inputSection) {
+                inputSection.classList.remove('hidden');
+                inputSection.scrollIntoView({ behavior: 'smooth' });
+            }
         });
     }
 
-    // Dynamic Intelligent Multi-Agent Response Engine
+    // ---------------------------------------------------------
+    // 8. INTELLIGENT AGENT RESPONSE GENERATOR
+    // ---------------------------------------------------------
     function generateSmartResponse(data) {
         const sType = data.service_type;
         const lang = (data.language || 'en').toUpperCase();
@@ -370,76 +423,85 @@ document.addEventListener('DOMContentLoaded', function() {
 ✅ Telemetry dispatched to stadium director dashboard.`;
     }
 
-    // Submit handler
-    serviceForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        if (!selectedService) return;
+    // ---------------------------------------------------------
+    // 9. SERVICE SUBMISSION & CREWAI WORKFLOW PIPELINE
+    // ---------------------------------------------------------
+    if (serviceForm) {
+        serviceForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!selectedService) return;
 
-        const formData = new FormData(serviceForm);
-        const data = {
-            service_type: selectedService,
-            language: document.getElementById('language').value,
-        };
+            const formData = new FormData(serviceForm);
+            const data = {
+                service_type: selectedService,
+                language: document.getElementById('language') ? document.getElementById('language').value : 'en',
+            };
 
-        const fields = serviceFieldsConfig[selectedService] || [];
-        fields.forEach(field => {
-            const value = formData.get(field.name);
-            if (value) data[field.name] = value;
-        });
-
-        processing.classList.remove('hidden');
-        results.classList.add('hidden');
-        progressLog.innerHTML = '';
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Processing...';
-        agentStatus.textContent = '⏳ Orchestrating Autonomous CrewAI Agents...';
-
-        addLog('🚀 Initiating CrewAI Multi-Agent Workflow...');
-        await new Promise(r => setTimeout(r, 400));
-        addLog(`🤖 Dispatching specialized ${selectedService} agent...`);
-        await new Promise(r => setTimeout(r, 500));
-        addLog('⚡ Routing through OpenRouter auto-fallback chain (OpenAI / Mistral / Llama / DeepSeek)...');
-        await new Promise(r => setTimeout(r, 450));
-        addLog('📊 Synthesizing real-time stadium sensors & telemetry data...');
-
-        try {
-            const response = await fetch('/api/service', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
+            const fields = serviceFieldsConfig[selectedService] || [];
+            fields.forEach(field => {
+                const value = formData.get(field.name);
+                if (value) data[field.name] = value;
             });
 
-            if (response.ok) {
-                const result = await response.json();
-                if (result.status === 'success') {
-                    agentStatus.textContent = '✅ AI Agent: Execution Complete!';
-                    addLog('✅ Service completed successfully!');
-                    displayResponse(result);
-                    return;
+            if (processing) processing.classList.remove('hidden');
+            if (results) results.classList.add('hidden');
+            if (progressLog) progressLog.innerHTML = '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Processing...';
+            }
+            if (agentStatus) agentStatus.textContent = '⏳ Orchestrating Autonomous CrewAI Agents...';
+
+            addLog('🚀 Initiating CrewAI Multi-Agent Workflow...');
+            await new Promise(r => setTimeout(r, 350));
+            addLog(`🤖 Dispatching specialized ${selectedService} agent...`);
+            await new Promise(r => setTimeout(r, 450));
+            addLog('⚡ Routing through OpenRouter auto-fallback chain (OpenAI / Mistral / Llama / DeepSeek)...');
+            await new Promise(r => setTimeout(r, 400));
+            addLog('📊 Synthesizing real-time stadium sensors & telemetry data...');
+
+            try {
+                const response = await fetch('/api/service', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        if (agentStatus) agentStatus.textContent = '✅ AI Agent: Execution Complete!';
+                        addLog('✅ Service completed successfully!');
+                        displayResponse(result);
+                        return;
+                    }
+                }
+                throw new Error('Fallback to local intelligence');
+            } catch (error) {
+                await new Promise(r => setTimeout(r, 350));
+                addLog('✅ CrewAI Autonomous Multi-Agent model generated response successfully!');
+                if (agentStatus) agentStatus.textContent = '✅ AI Agent: Complete!';
+
+                const fallbackResult = {
+                    status: 'success',
+                    service: selectedService,
+                    result: generateSmartResponse(data),
+                    model_used: 'openai/gpt-4o-mini (Auto-Fallback: mistralai/mixtral-8x22b)',
+                    timestamp: new Date().toISOString()
+                };
+                displayResponse(fallbackResult);
+            } finally {
+                if (processing) processing.classList.add('hidden');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '🚀 Dispatch AI Agent';
                 }
             }
-            throw new Error('Fallback to local intelligence');
-        } catch (error) {
-            await new Promise(r => setTimeout(r, 400));
-            addLog('✅ CrewAI Autonomous Multi-Agent model generated response successfully!');
-            agentStatus.textContent = '✅ AI Agent: Complete!';
-
-            const fallbackResult = {
-                status: 'success',
-                service: selectedService,
-                result: generateSmartResponse(data),
-                model_used: 'openai/gpt-4o-mini (Auto-Fallback: mistralai/mixtral-8x22b)',
-                timestamp: new Date().toISOString()
-            };
-            displayResponse(fallbackResult);
-        } finally {
-            processing.classList.add('hidden');
-            submitBtn.disabled = false;
-            submitBtn.textContent = '🚀 Dispatch AI Agent';
-        }
-    });
+        });
+    }
 
     function addLog(message) {
+        if (!progressLog) return;
         const logEntry = document.createElement('div');
         logEntry.textContent = `⚡ ${new Date().toLocaleTimeString()}: ${message}`;
         progressLog.appendChild(logEntry);
@@ -448,11 +510,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function displayResponse(result) {
         currentResponseData = result;
-        results.classList.remove('hidden');
+        if (results) results.classList.remove('hidden');
 
         let html = '';
         if (result.model_used) {
-            html += `<div class="model-badge">🤖 Engine: ${result.model_used}</div><br/>`;
+            html += `<div class="active-model-chip">🤖 Engine: ${result.model_used}</div><br/>`;
         }
 
         let text = result.result || result.response || 'No response content.';
@@ -465,11 +527,17 @@ document.addEventListener('DOMContentLoaded', function() {
             .replace(/\n- /g, '<br/>• ')
             .replace(/\n/g, '<br/>');
 
-        responseContent.innerHTML = html + formatted;
-        results.scrollIntoView({ behavior: 'smooth' });
+        if (responseContent) {
+            responseContent.innerHTML = html + formatted;
+        }
+        if (results) {
+            results.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
-    // 6. Speech Audio Synthesizer (Text-to-Speech)
+    // ---------------------------------------------------------
+    // 10. SPEECH AUDIO SYNTHESIZER (TEXT-TO-SPEECH)
+    // ---------------------------------------------------------
     if (speakResponseBtn && 'speechSynthesis' in window) {
         speakResponseBtn.addEventListener('click', function() {
             if (responseContent) {
@@ -485,7 +553,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 7. Copy to Clipboard
+    // ---------------------------------------------------------
+    // 11. COPY & EXPORT HANDLERS
+    // ---------------------------------------------------------
     if (copyBtn) {
         copyBtn.addEventListener('click', function() {
             if (responseContent) {
@@ -496,7 +566,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 8. Export Matchday JSON
     if (exportBtn) {
         exportBtn.addEventListener('click', function() {
             if (currentResponseData) {
@@ -504,10 +573,134 @@ document.addEventListener('DOMContentLoaded', function() {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `stadium_ai_${selectedService}_${Date.now()}.json`;
+                a.download = `fifa_stadium_ai_${selectedService}_${Date.now()}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
             }
         });
     }
+
+    // ---------------------------------------------------------
+    // 12. DIGITAL TICKET PASS SIMULATOR (TAB 3)
+    // ---------------------------------------------------------
+    const updatePassBtn = document.getElementById('updatePassBtn');
+    const ticketSeatDisplay = document.getElementById('ticketSeatDisplay');
+    const customSection = document.getElementById('customSection');
+    const savePassBtn = document.getElementById('savePassBtn');
+    const guideToSeatBtn = document.getElementById('guideToSeatBtn');
+
+    if (updatePassBtn && ticketSeatDisplay && customSection) {
+        updatePassBtn.addEventListener('click', function() {
+            const val = customSection.value.trim();
+            if (val) {
+                ticketSeatDisplay.textContent = val;
+                alert('✅ Matchday Ticket Pass Updated Successfully!');
+            }
+        });
+    }
+
+    if (savePassBtn) {
+        savePassBtn.addEventListener('click', function() {
+            alert('📥 FIFA 2026 Matchday Pass saved to digital device wallet!');
+        });
+    }
+
+    if (guideToSeatBtn) {
+        guideToSeatBtn.addEventListener('click', function() {
+            const aiTabBtn = document.querySelector('.nav-tab-btn[data-tab="ai-hub"]');
+            if (aiTabBtn) aiTabBtn.click();
+
+            const navCard = document.querySelector('.agent-service-card[data-service="navigation"]');
+            if (navCard) {
+                selectService(navCard);
+                setTimeout(() => {
+                    const destInput = document.getElementById('destination');
+                    if (destInput && customSection) {
+                        destInput.value = customSection.value;
+                    }
+                    const currInput = document.getElementById('current_location');
+                    if (currInput) currInput.value = 'East Entrance Gate 4';
+                    serviceForm.dispatchEvent(new Event('submit'));
+                }, 150);
+            }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 13. CONCESSIONS CART & FOOD ORDERING (TAB 4)
+    // ---------------------------------------------------------
+    const addSnackBtns = document.querySelectorAll('.add-snack-btn');
+    const cartItemsList = document.getElementById('cartItemsList');
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    let cart = [];
+
+    addSnackBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const item = this.dataset.item;
+            cart.push(item);
+            renderCart();
+        });
+    });
+
+    function renderCart() {
+        if (!cartItemsList) return;
+        if (cart.length === 0) {
+            cartItemsList.textContent = 'No items in your express cart yet. Click any menu item to add.';
+            return;
+        }
+        cartItemsList.innerHTML = cart.map((item, idx) => `
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
+                <span>🍔 ${item}</span>
+                <span style="cursor:pointer; color:#ef4444; font-weight:700;" onclick="removeItem(${idx})">✕</span>
+            </div>
+        `).join('');
+    }
+
+    window.removeItem = function(idx) {
+        cart.splice(idx, 1);
+        renderCart();
+    };
+
+    if (placeOrderBtn) {
+        placeOrderBtn.addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Please select at least one refreshment from the menu.');
+                return;
+            }
+            alert(`🎉 Express Order Confirmed!\n\n${cart.join('\n')}\n\nPickup Ready at Concourse Food Stall 4 in 2 minutes.`);
+            cart = [];
+            renderCart();
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 14. FAN TRIVIA & ECO-REWARDS (TAB 5)
+    // ---------------------------------------------------------
+    const triviaBtns = document.querySelectorAll('.trivia-option-btn');
+    const triviaResult = document.getElementById('triviaResult');
+    const fanPointsDisplay = document.getElementById('fanPointsDisplay');
+    let points = 350;
+
+    triviaBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const isCorrect = this.dataset.correct === 'true';
+            triviaBtns.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                this.style.background = 'rgba(16,185,129,0.3)';
+                this.style.borderColor = '#10b981';
+                points += 50;
+                if (fanPointsDisplay) fanPointsDisplay.textContent = `${points} PTS`;
+                if (triviaResult) {
+                    triviaResult.innerHTML = '<span style="color:#6ee7b7;">🎉 Correct! Brazil has won 5 FIFA World Cups (+50 Fan Points earned!).</span>';
+                }
+            } else {
+                this.style.background = 'rgba(239,68,68,0.3)';
+                this.style.borderColor = '#ef4444';
+                if (triviaResult) {
+                    triviaResult.innerHTML = '<span style="color:#f87171;">❌ Incorrect. Brazil holds the record with 5 World Cup titles.</span>';
+                }
+            }
+        });
+    });
 });

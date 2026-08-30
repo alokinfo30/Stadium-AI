@@ -1,30 +1,42 @@
-/* FIFA World Cup 2026 - AI Stadium Assistant Cyberpunk Stadium Theme */
+/* ==========================================================================
+   🏟️ FIFA World Cup 2026 - AI Stadium Assistant | Ultra-Premium UI/UX
+   ========================================================================== */
+
 :root {
-    --bg-base: #080c16;
-    --bg-surface: #0f172a;
-    --bg-card: rgba(15, 23, 42, 0.75);
-    --bg-card-hover: rgba(30, 41, 59, 0.85);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --border-glow: rgba(16, 185, 129, 0.3);
+    --bg-base: #060913;
+    --bg-surface: #0b1120;
+    --bg-card: rgba(15, 23, 42, 0.78);
+    --bg-card-hover: rgba(30, 41, 59, 0.92);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-active: rgba(16, 185, 129, 0.45);
     
     --primary: #10b981;
-    --primary-glow: rgba(16, 185, 129, 0.4);
-    --accent-gold: #f59e0b;
-    --accent-cyan: #06b6d4;
-    --accent-pink: #ec4899;
-    --accent-purple: #8b5cf6;
+    --primary-light: #34d399;
+    --primary-dark: #047857;
+    --primary-glow: rgba(16, 185, 129, 0.35);
     
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --text-dim: #64748b;
+    --gold: #f59e0b;
+    --gold-light: #fbbf24;
+    --gold-glow: rgba(245, 158, 11, 0.35);
+    
+    --cyan: #06b6d4;
+    --cyan-glow: rgba(6, 182, 212, 0.35);
+    
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --red: #ef4444;
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
     
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
     --radius-xl: 28px;
     
-    --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 25px rgba(16, 185, 129, 0.25);
+    --shadow-soft: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 30px rgba(16, 185, 129, 0.22);
 }
 
 * {
@@ -35,10 +47,10 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #090d16 50%, #030712 100%);
+    background: radial-gradient(circle at 50% -10%, #1e1b4b 0%, #060913 45%, #02040a 100%);
     min-height: 100vh;
     padding: 16px;
-    color: var(--text-main);
+    color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
 }
@@ -51,7 +63,7 @@ body {
     color: #000;
     padding: 10px 16px;
     font-weight: 700;
-    z-index: 1000;
+    z-index: 10000;
     border-radius: var(--radius-sm);
 }
 
@@ -72,101 +84,117 @@ body {
     border: 0;
 }
 
-.app-wrapper {
-    max-width: 1300px;
+.app-container {
+    max-width: 1320px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 22px;
 }
 
-/* TOP STATUS TICKER */
-.live-match-ticker {
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+/* ==========================================================================
+   1. LIVE MATCHDAY CENTRAL TICKER & TELEMETRY
+   ========================================================================== */
+.matchday-ticker {
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    padding: 14px 20px;
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 12px;
-    box-shadow: var(--shadow-card);
+    gap: 14px;
+    box-shadow: var(--shadow-soft);
 }
 
-.match-info {
+.ticker-match {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
 }
 
-.live-pill {
-    background: #ef4444;
+.live-badge {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
     color: #fff;
     padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: flex;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    animation: pulseGlow 2s infinite;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+    animation: livePulse 2s infinite;
 }
 
-.live-pill::before {
+.live-badge::before {
     content: '';
-    display: inline-block;
     width: 6px;
     height: 6px;
-    border-radius: 50%;
     background: #fff;
+    border-radius: 50%;
 }
 
-.match-teams {
+.match-title {
     font-weight: 700;
-    font-size: 1rem;
-    color: var(--text-main);
+    font-size: 0.95rem;
+    color: var(--text-primary);
 }
 
-.match-score {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 8px;
+.score-box {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    padding: 2px 10px;
     border-radius: 6px;
-    color: var(--accent-gold);
+    color: var(--gold-light);
+    font-weight: 800;
     font-family: monospace;
+    font-size: 1.05rem;
 }
 
-.stadium-telemetry {
+.match-clock {
+    color: #6ee7b7;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.ticker-telemetry {
     display: flex;
     align-items: center;
     gap: 18px;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
 }
 
-.telemetry-item {
+.tele-pill {
     display: flex;
     align-items: center;
     gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.telemetry-item b {
-    color: var(--text-main);
+.tele-pill b {
+    color: var(--text-primary);
 }
 
-/* HEADER HERO */
+/* ==========================================================================
+   2. HERO BRAND HEADER
+   ========================================================================== */
 .hero-header {
-    background: linear-gradient(135deg, rgba(30, 27, 75, 0.7), rgba(15, 23, 42, 0.85));
-    backdrop-filter: blur(16px);
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.75), rgba(15, 23, 42, 0.9));
+    backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--radius-xl);
-    padding: 36px 32px;
+    padding: 34px 32px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7);
 }
 
 .hero-header::after {
@@ -174,14 +202,14 @@ body {
     position: absolute;
     top: -50%;
     right: -10%;
-    width: 400px;
-    height: 400px;
+    width: 450px;
+    height: 450px;
     background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
 }
 
-.header-top {
+.hero-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -192,20 +220,20 @@ body {
     z-index: 1;
 }
 
-.brand-wrapper {
+.brand-title-group {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
 }
 
-.stadium-icon-glow {
+.stadium-logo-icon {
     font-size: 2.8rem;
-    filter: drop-shadow(0 0 16px var(--primary-glow));
-    animation: floatSlow 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 18px var(--primary-glow));
+    animation: iconFloat 4s ease-in-out infinite;
 }
 
-.header-title-group h1 {
-    font-size: 2.4rem;
+.hero-title-text h1 {
+    font-size: 2.35rem;
     font-weight: 900;
     letter-spacing: -0.5px;
     background: linear-gradient(135deg, #ffffff 30%, #a7f3d0 70%, #38bdf8 100%);
@@ -213,30 +241,30 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-.world-cup-badge {
+.fifa-badge-pill {
     background: linear-gradient(135deg, #d97706, #b45309);
-    border: 1px solid rgba(245, 158, 11, 0.4);
+    border: 1px solid rgba(245, 158, 11, 0.5);
     padding: 8px 18px;
     border-radius: 30px;
     font-weight: 800;
     font-size: 0.88rem;
     color: #fff;
-    box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+    box-shadow: 0 4px 18px rgba(217, 119, 6, 0.4);
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.subtitle {
-    color: var(--text-muted);
-    font-size: 1.12rem;
-    max-width: 700px;
+.hero-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 720px;
     margin-bottom: 20px;
     position: relative;
     z-index: 1;
 }
 
-.feature-badges-row {
+.hero-chips-bar {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -244,7 +272,7 @@ body {
     z-index: 1;
 }
 
-.chip-badge {
+.hero-chip {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
     padding: 6px 14px;
@@ -258,13 +286,54 @@ body {
     transition: all 0.2s ease;
 }
 
-.chip-badge:hover {
+.hero-chip:hover {
     background: rgba(255, 255, 255, 0.12);
     border-color: var(--primary);
     transform: translateY(-2px);
 }
 
-/* QUICK ACTION TOOLBAR */
+/* ==========================================================================
+   3. TOP NAVIGATION TABS (AI HUB, MATCH CENTER, FAN WALLET, CONCESSIONS)
+   ========================================================================== */
+.main-nav-tabs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.nav-tab-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 12px 22px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.nav-tab-btn:hover {
+    background: var(--bg-card-hover);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-tab-btn.active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(15, 23, 42, 0.95));
+    border-color: var(--primary);
+    color: #a7f3d0;
+    box-shadow: 0 0 16px var(--primary-glow);
+}
+
+/* ==========================================================================
+   4. QUICK ACTION & VOICE SEARCH BAR
+   ========================================================================== */
 .quick-action-bar {
     display: flex;
     align-items: center;
@@ -272,25 +341,31 @@ body {
     gap: 14px;
     flex-wrap: wrap;
     background: var(--bg-card);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    padding: 16px 22px;
+    padding: 14px 20px;
 }
 
-.quick-search-box {
+.search-input-wrapper {
     flex: 1;
-    min-width: 260px;
+    min-width: 280px;
     display: flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 30px;
-    padding: 8px 16px;
+    padding: 8px 18px;
     gap: 10px;
+    transition: all 0.2s ease;
 }
 
-.quick-search-box input {
+.search-input-wrapper:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 14px var(--primary-glow);
+}
+
+.search-input-wrapper input {
     background: transparent;
     border: none;
     outline: none;
@@ -299,92 +374,94 @@ body {
     width: 100%;
 }
 
+.search-input-wrapper input::placeholder {
+    color: #64748b;
+}
+
 .voice-mic-btn {
     background: rgba(16, 185, 129, 0.15);
     border: 1px solid var(--primary);
     color: var(--primary);
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-size: 1rem;
 }
 
 .voice-mic-btn:hover {
     background: var(--primary);
     color: #000;
-    box-shadow: 0 0 12px var(--primary);
+    box-shadow: 0 0 14px var(--primary);
 }
 
 .voice-mic-btn.recording {
     background: #ef4444;
     color: #fff;
     border-color: #ef4444;
-    animation: pulseGlow 1s infinite;
+    animation: livePulse 1s infinite;
 }
 
-.action-buttons-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.sos-btn {
+.sos-emergency-btn {
     background: linear-gradient(135deg, #dc2626, #991b1b);
     color: #fff;
     border: 1px solid #ef4444;
-    padding: 8px 16px;
+    padding: 9px 18px;
     border-radius: 30px;
-    font-weight: 700;
-    font-size: 0.85rem;
+    font-weight: 800;
+    font-size: 0.86rem;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
 }
 
-.sos-btn:hover {
+.sos-emergency-btn:hover {
     background: #ef4444;
-    transform: scale(1.04);
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
 }
 
-/* INTERACTIVE STADIUM MAP & SECTION RADAR */
-.stadium-radar-section {
+/* ==========================================================================
+   5. INTERACTIVE 2D STADIUM RADAR & HEATMAP
+   ========================================================================== */
+.stadium-radar-panel {
     background: var(--bg-card);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
     padding: 24px 28px;
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-soft);
 }
 
-.section-header-row {
+.panel-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 18px;
 }
 
-.section-header-row h2 {
-    font-size: 1.3rem;
+.panel-header-row h2 {
+    font-size: 1.25rem;
     font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: var(--text-primary);
 }
 
-.stadium-zones-grid {
+.radar-zones-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
 }
 
-.zone-radar-card {
+.zone-box-card {
     background: rgba(30, 41, 59, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
@@ -396,64 +473,66 @@ body {
     gap: 6px;
 }
 
-.zone-radar-card:hover {
-    background: rgba(51, 65, 85, 0.8);
+.zone-box-card:hover {
+    background: rgba(51, 65, 85, 0.85);
     border-color: var(--primary);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-.zone-radar-card.active {
-    background: rgba(16, 185, 129, 0.15);
+.zone-box-card.active {
+    background: rgba(16, 185, 129, 0.16);
     border-color: var(--primary);
-    box-shadow: 0 0 16px var(--primary-glow);
+    box-shadow: 0 0 18px var(--primary-glow);
 }
 
-.zone-top {
+.zone-top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.zone-name {
+.zone-title {
     font-weight: 700;
     font-size: 0.92rem;
-    color: var(--text-main);
+    color: var(--text-primary);
 }
 
-.density-dot {
+.density-indicator {
     width: 8px;
     height: 8px;
     border-radius: 50%;
 }
 
-.density-dot.low { background: #10b981; box-shadow: 0 0 8px #10b981; }
-.density-dot.moderate { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
-.density-dot.high { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+.density-indicator.low { background: #10b981; box-shadow: 0 0 8px #10b981; }
+.density-indicator.moderate { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+.density-indicator.high { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
 
-.zone-stats {
+.zone-desc {
     font-size: 0.78rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
 }
 
-/* 7 SPECIALIZED AI SERVICES GRID */
-.service-section {
+/* ==========================================================================
+   6. 7 AUTONOMOUS AI AGENT SERVICES GRID
+   ========================================================================== */
+.services-container {
     background: var(--bg-card);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
     padding: 28px;
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-soft);
 }
 
-.service-grid {
+.services-grid-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
     gap: 18px;
     margin-top: 18px;
 }
 
-.service-card {
+.agent-service-card {
     background: rgba(30, 41, 59, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
@@ -467,20 +546,20 @@ body {
     overflow: hidden;
 }
 
-.service-card:hover {
+.agent-service-card:hover {
     background: rgba(30, 41, 59, 0.95);
     border-color: var(--primary);
     transform: translateY(-4px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--primary-glow);
 }
 
-.service-card.selected {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(15, 23, 42, 0.9));
+.agent-service-card.selected {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(15, 23, 42, 0.92));
     border-color: var(--primary);
     box-shadow: 0 0 25px var(--primary-glow);
 }
 
-.service-icon-box {
+.agent-icon-avatar {
     width: 52px;
     height: 52px;
     border-radius: var(--radius-md);
@@ -489,30 +568,30 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: 1.75rem;
     transition: transform 0.3s ease;
 }
 
-.service-card:hover .service-icon-box {
-    transform: scale(1.1) rotate(5deg);
-    background: rgba(16, 185, 129, 0.2);
+.agent-service-card:hover .agent-icon-avatar {
+    transform: scale(1.12) rotate(4deg);
+    background: rgba(16, 185, 129, 0.22);
     border-color: var(--primary);
 }
 
-.service-card h3 {
+.agent-service-card h3 {
     font-size: 1.18rem;
     font-weight: 700;
-    color: var(--text-main);
+    color: var(--text-primary);
 }
 
-.service-card p {
-    color: var(--text-muted);
+.agent-service-card p {
+    color: var(--text-secondary);
     font-size: 0.88rem;
     line-height: 1.5;
     flex-grow: 1;
 }
 
-.btn-select-service {
+.select-agent-btn {
     background: rgba(255, 255, 255, 0.08);
     color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -526,30 +605,32 @@ body {
     width: 100%;
 }
 
-.service-card:hover .btn-select-service,
-.service-card.selected .btn-select-service {
+.agent-service-card:hover .select-agent-btn,
+.agent-service-card.selected .select-agent-btn {
     background: var(--primary);
     color: #032014;
     border-color: var(--primary);
-    box-shadow: 0 0 12px var(--primary-glow);
+    box-shadow: 0 0 14px var(--primary-glow);
 }
 
-/* INTERACTIVE INPUT SECTION */
-.input-section {
+/* ==========================================================================
+   7. INTERACTIVE INPUT FORM & LANGUAGE SELECTOR
+   ========================================================================== */
+.request-form-panel {
     background: var(--bg-card);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    border: 1px solid var(--border-active);
     border-radius: var(--radius-xl);
     padding: 32px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
     animation: fadeIn 0.3s ease;
 }
 
-.form-group {
+.form-group-item {
     margin-bottom: 18px;
 }
 
-.form-group label {
+.form-group-item label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
@@ -557,9 +638,9 @@ body {
     color: #cbd5e1;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-group-item input,
+.form-group-item select,
+.form-group-item textarea {
     width: 100%;
     padding: 12px 16px;
     background: rgba(15, 23, 42, 0.9);
@@ -571,16 +652,16 @@ body {
     transition: all 0.2s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group-item input:focus,
+.form-group-item select:focus,
+.form-group-item textarea:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 12px var(--primary-glow);
     background: rgba(15, 23, 42, 1);
 }
 
-.btn-primary {
+.btn-primary-action {
     background: linear-gradient(135deg, #10b981, #059669);
     color: #032014;
     border: none;
@@ -596,13 +677,13 @@ body {
     gap: 8px;
 }
 
-.btn-primary:hover {
+.btn-primary-action:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px var(--primary-glow);
     background: linear-gradient(135deg, #34d399, #10b981);
 }
 
-.btn-secondary {
+.btn-secondary-action {
     background: rgba(255, 255, 255, 0.08);
     color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -615,14 +696,16 @@ body {
     margin-left: 10px;
 }
 
-.btn-secondary:hover {
+.btn-secondary-action:hover {
     background: rgba(255, 255, 255, 0.15);
     color: #fff;
 }
 
-/* PROCESSING & LOGS */
-.processing {
-    background: rgba(15, 23, 42, 0.95);
+/* ==========================================================================
+   8. REAL-TIME MULTI-AGENT LOGS & PROCESSING
+   ========================================================================== */
+.agent-processing-box {
+    background: rgba(15, 23, 42, 0.96);
     border: 1px solid var(--primary);
     border-radius: var(--radius-xl);
     padding: 32px;
@@ -630,18 +713,18 @@ body {
     box-shadow: 0 0 35px var(--primary-glow);
 }
 
-.spinner {
+.processing-spinner {
     width: 48px;
     height: 48px;
     border: 4px solid rgba(255, 255, 255, 0.1);
     border-top-color: var(--primary);
     border-radius: 50%;
     margin: 0 auto 16px;
-    animation: spin 0.8s linear infinite;
+    animation: spinRotate 0.8s linear infinite;
 }
 
-.progress-log {
-    background: rgba(0, 0, 0, 0.4);
+.workflow-log-console {
+    background: rgba(0, 0, 0, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     padding: 14px;
@@ -654,8 +737,10 @@ body {
     color: #a7f3d0;
 }
 
-/* RESULTS DISPLAY */
-.results {
+/* ==========================================================================
+   9. RESULTS PANEL & OUTPUT
+   ========================================================================== */
+.results-output-panel {
     background: var(--bg-card);
     backdrop-filter: blur(16px);
     border: 1px solid rgba(16, 185, 129, 0.4);
@@ -665,7 +750,7 @@ body {
     animation: fadeIn 0.4s ease;
 }
 
-.results-header {
+.results-header-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -676,7 +761,7 @@ body {
     margin-bottom: 20px;
 }
 
-.model-badge {
+.active-model-chip {
     background: rgba(16, 185, 129, 0.15);
     border: 1px solid var(--primary);
     color: #6ee7b7;
@@ -687,23 +772,23 @@ body {
     display: inline-block;
 }
 
-.response-content {
+.result-content-body {
     font-size: 1rem;
     line-height: 1.7;
     color: #f1f5f9;
 }
 
-.response-content h3 {
+.result-content-body h3 {
     color: #38bdf8;
     margin: 16px 0 8px;
     font-size: 1.25rem;
 }
 
-.response-content b {
+.result-content-body b {
     color: #a7f3d0;
 }
 
-.response-content blockquote {
+.result-content-body blockquote {
     border-left: 4px solid var(--primary);
     padding-left: 14px;
     margin: 12px 0;
@@ -712,11 +797,76 @@ body {
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
-/* FOOTER */
+/* ==========================================================================
+   10. FAN EXPERIENCE HUB (WALLET, CONCESSIONS, TRIVIA)
+   ========================================================================== */
+.fan-hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.fan-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.fan-card h3 {
+    font-size: 1.15rem;
+    color: var(--text-primary);
+}
+
+.ticket-pass-preview {
+    background: linear-gradient(135deg, #1e1b4b, #0f172a);
+    border: 1px solid var(--border-active);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold-light);
+}
+
+.ticket-seat {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.ticket-barcode-sim {
+    background: #fff;
+    height: 36px;
+    border-radius: 4px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-family: monospace;
+    font-weight: 900;
+    letter-spacing: 4px;
+    font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   11. FOOTER
+   ========================================================================== */
 footer {
     text-align: center;
-    padding: 24px;
-    color: var(--text-dim);
+    padding: 28px 20px;
+    color: var(--text-muted);
     font-size: 0.85rem;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
@@ -730,17 +880,19 @@ footer {
     display: none !important;
 }
 
-/* ANIMATIONS */
-@keyframes spin {
+/* ==========================================================================
+   12. ANIMATIONS & RESPONSIVENESS
+   ========================================================================== */
+@keyframes spinRotate {
     to { transform: rotate(360deg); }
 }
 
-@keyframes floatSlow {
+@keyframes iconFloat {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-6px); }
 }
 
-@keyframes pulseGlow {
+@keyframes livePulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
 }
@@ -752,8 +904,8 @@ footer {
 
 @media (max-width: 768px) {
     body { padding: 10px; }
-    .hero-header { padding: 24px 18px; }
-    .header-title-group h1 { font-size: 1.8rem; }
-    .stadium-telemetry { display: none; }
-    .service-grid { grid-template-columns: 1fr; }
+    .hero-header { padding: 22px 18px; }
+    .hero-title-text h1 { font-size: 1.8rem; }
+    .ticker-telemetry { display: none; }
+    .services-grid-layout { grid-template-columns: 1fr; }
 }
